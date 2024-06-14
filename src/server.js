@@ -2,11 +2,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
-const router = require('./routes/authRoutes');
 
 const app = express();
 
-// Swagger configuration
+// Opciones de configuración de Swagger
 const swaggerOptions = {
   swaggerDefinition: {
     openapi: '3.0.0',
@@ -16,21 +15,13 @@ const swaggerOptions = {
       description: 'Una API de ejemplo para ilustrar swaggerDocs',
     },
   },
-  apis: ['./routes/authRoutes.js'],
+  apis: ['./routes/authRoutes.js'], // Ubicación de tus archivos de rutas
 };
 
+// Genera la especificación de Swagger
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
 
 // Middleware
 app.use(bodyParser.json());
 
-// Routes
-app.use(router);  // Ensure 'router' is a middleware function
-
-// Swagger UI setup
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Listening on port ${PORT}...`));
-
-module.exports = app;
+module.exports = { app, swaggerDocs };
